@@ -122,13 +122,13 @@ const key = await crypto.subtle.deriveKey(
 );
 ```
 
-The salt is generated using the [crypto.getRandomValues()](https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues) function which produces a "cryptographically strong" set of 16 numbers between 0 and 255. You can see an example of a generated salt by running the following in your browser's dev console:
+The salt is generated using the [crypto.getRandomValues()](https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues) function to produce a "cryptographically strong" set of 16 numbers between 0 and 255. You can see an example of a generated salt by running the following in your browser's dev console:
 
 ``` 
 alert(crypto.getRandomValues(new Uint8Array(16)));
 ```
 
-You should see an alert with random values like this:  
+You should see an alert popup with random values like this:  
 126,11,104,66,56,207,70,142,171,219,91,89,158,80,250,159
 
 The next step is to create the CryptoKey object using the [crypto.subtle.importKey](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey) method, which takes a number of parameters:
@@ -242,6 +242,6 @@ We next convert the encrypted message into an integer array and make a final com
 
 Our final step is to convert the combined integer array into a Base64 string using the [btoa](https://developer.mozilla.org/en-US/docs/Web/API/Window/btoa) method, [String.fromCharCode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/fromCharCode), and using [spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) to allow the methods to iterate over the combined array. 
 
-Our encryptMessage function then returns the Base64 text which can be shared and decrypted using the password we specified. 
+Our encryptMessage function then returns the Base64 text which can be shared and decrypted using the password that was used to encrypt it. 
 
-The decryption function will explained in part 2. 
+The decryption function will be explained in part 2. 
