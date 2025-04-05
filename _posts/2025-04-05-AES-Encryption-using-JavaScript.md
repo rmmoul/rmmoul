@@ -92,7 +92,7 @@ const messageBytes = encoder.encode(message);
 
 ## Create the encryption key
 
-In the next section of the function we need to generate a [salt](https://en.wikipedia.org/wiki/Salt_(cryptography)), creates a [CryptoKey object](https://developer.mozilla.org/en-US/docs/Web/API/CryptoKey) using our password, and then finally [derives the final encryption key](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/deriveKey) using our salt and password. 
+In the next section of the function we need to generate a [salt](https://en.wikipedia.org/wiki/Salt_(cryptography)), create a [CryptoKey object](https://developer.mozilla.org/en-US/docs/Web/API/CryptoKey) using our password, and then finally [derive the final encryption key](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/deriveKey) using our salt and password. 
 
 ```
 // Generate a random salt for key derivation.
@@ -122,7 +122,7 @@ const key = await crypto.subtle.deriveKey(
 );
 ```
 
-The salt is generated using the [crypto.getRandomValues()](https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues) function which produces a "cryptographically strong" set of 16 numbers between 0 and 255. You can see an example of the generate salt by running the following in your browser's dev console:
+The salt is generated using the [crypto.getRandomValues()](https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues) function which produces a "cryptographically strong" set of 16 numbers between 0 and 255. You can see an example of a generated salt by running the following in your browser's dev console:
 
 ``` 
 alert(crypto.getRandomValues(new Uint8Array(16)));
@@ -133,7 +133,9 @@ You should see an alert with random values like this:
 
 The next step is to create the CryptoKey object using the [crypto.subtle.importKey](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey) method, which takes a number of parameters:
 
+``` 
 importKey(format, keyData, algorithm, extractable, keyUsages)
+```
 
 - format
 	+ This is to specify the key format that will be returned, and we're requesting a [raw key format](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#raw) in our function
@@ -144,21 +146,23 @@ importKey(format, keyData, algorithm, extractable, keyUsages)
 - extractable
 	+ This just specifies whether we want the key to be exportable and we do not need this so we're setting this value to false. 
 - keyUsages
-	+ We're going to use this CryptoKey object to derive the key that will be used to encrypt our message. This parameter can take multiple values but we're only going to pass "deriveKey" since that is all we need to use it for.
+	+ We're going to use this CryptoKey object to derive the key that will be used to encrypt our message. This parameter can take multiple values in an array but we're only going to pass "deriveKey" since that is all we need to use it for.
 	
 
 The final step in this section of the function is to derive the key using the crypto.subtle.deriveKey method. This method takes several parameters and our selections are explained below. 
 
+``` 
 deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages)
+```
 
 - algorithm
 	+ We're using the PBKDF2 algorithm again here and we have an [array of parameters](https://developer.mozilla.org/en-US/docs/Web/API/Pbkdf2Params) to pass for this algorithm
 		* name
 			- PBKDF2
 		* salt
-			- We're using our generate salt
+			- We're using our generated salt
 		* iterations
-			- This sets the number of times the hash function will be executed. A higher number here will take more time (which is good) and we're using 100,000 for our iterations 
+			- This sets the number of times the hash function will be executed. A higher number here will take more time (which is good) and we're setting 100,000 for our iterations 
 		* hash
 			- We're using the SHA-256 hashing method
 - baseKey
@@ -172,12 +176,12 @@ deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages)
 - extractable
 	+ This just specifies whether we want the key to be exportable and we do not need this so we're setting this value to false.
 - keyUsages
-	+ This can take an array of specified usages but we're just using this key to encrypt
+	+ This can take an array of specified usages but we're just using this key to encrypt so that's all we're setting
 	
 
 ## Creating an IV and encrypting the message
 
-Here we're creating an [IV (initialization vector)](https://en.wikipedia.org/wiki/Initialization_vector) using the method we used to create our salt. We then use the IV, and our derived key to encrypt our message. 
+Here we're creating an [IV (initialization vector)](https://en.wikipedia.org/wiki/Initialization_vector) using the same method we used to create our salt. We then use the IV, and our derived key to encrypt our message. 
 
 ```
 // Generate a random Initialization Vector.
@@ -196,7 +200,9 @@ const encryptedContent = await crypto.subtle.encrypt(
 
 The encryption is done using the [crypto.subtle.encrypt](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/encrypt) method which takes a few parameters. 
 
+```
 encrypt(algorithm, key, data)
+```
 
 * algorithm
 	- We're using the AES-CBC algorithm again here and need to pass [an array with two parameters](https://developer.mozilla.org/en-US/docs/Web/API/AesCbcParams) for this algorithm
@@ -205,14 +211,14 @@ encrypt(algorithm, key, data)
 		+ iv
 			* We pass the iv value we generated
 * key
-	- We pass our key which is a CyrptoKey object we derived previously
+	- We pass our key which is the CyrptoKey object we derived previously
 * data
 	- This is the integer array that we created from our message text
 	
 
 ## Combining our results and converting them to Base64 to share
 
-The final steps combine the various pieces that will be needed to eventually decrypt our message and then return that as a Base64 string that can be easily shared via email or plain text file. 
+The final steps combine the various pieces that will be needed to eventually decrypt our message and then return that as a Base64 string that can be easily shared via email or a plain text file. 
 
 ```
 // Combine salt, IV, and ciphertext into a single Uint8Array.
@@ -232,10 +238,10 @@ return base64String;
 
 The first step here is to get the length of the salt and iv in bytes so that we can reserve enough space for them at the start of the integer array of the final combined data. 
 
-We next convert the encrypted message into an integer array and make a final combined integer array that is sized based on the size of the salt, iv, and encrypted message. The iv, salt, and message (which are all integer arrays) then get inserted into the final combined array using using the set() method and using the lengths of each item to specify the offset in the array to insert each value. 
+We next convert the encrypted message into an integer array and make a final combined integer array that is sized based on the size of the salt, iv, and encrypted message. We do this because a Uint8Array has a fixed size so the combined array needs to be properly sized to fit each item. Then the iv, salt, and message (which are all integer arrays) get inserted into the final combined array using using the set() method and using the lengths of each item to specify the offset in the array to insert each value. 
 
-Our final step is to convert the combined integer array into a Base64 string using the [btoa](https://developer.mozilla.org/en-US/docs/Web/API/Window/btoa) method using [String.fromCharCode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/fromCharCode) and [spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) to allow the method to iterate over the combined array. 
+Our final step is to convert the combined integer array into a Base64 string using the [btoa](https://developer.mozilla.org/en-US/docs/Web/API/Window/btoa) method, [String.fromCharCode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/fromCharCode), and using [spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) to allow the methods to iterate over the combined array. 
 
-The encryptMessage then returns the Base64 text which can be decrypted using the password we specified. 
+The encryptMessage then returns the Base64 text which can be shared and decrypted using the password we specified. 
 
 The decryption function will explained in part 2. 
