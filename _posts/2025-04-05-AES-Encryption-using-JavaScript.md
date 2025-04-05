@@ -12,65 +12,65 @@ I also have a working exmaple running on codpen here:
 Here is the full encryption function that we'll be working through and explaining:
 
 ```
-	async function encryptMessage(message, password){
-		// Convert strings to Uint8Arrays.
-		const encoder = new TextEncoder();
-		const passwordBytes = encoder.encode(password);
-		const messageBytes = encoder.encode(message);
+async function encryptMessage(message, password){
+	// Convert strings to Uint8Arrays.
+	const encoder = new TextEncoder();
+	const passwordBytes = encoder.encode(password);
+	const messageBytes = encoder.encode(message);
 
-		// Generate a random salt for key derivation.
-		const salt = crypto.getRandomValues(new Uint8Array(16));
+	// Generate a random salt for key derivation.
+	const salt = crypto.getRandomValues(new Uint8Array(16));
 
-		// Import the password as key material.
-		const keyMaterial = await crypto.subtle.importKey(
-			'raw',
-			passwordBytes,
-			{ name: 'PBKDF2' },
-			false,
-			['deriveKey']
-		);
+	// Import the password as key material.
+	const keyMaterial = await crypto.subtle.importKey(
+		'raw',
+		passwordBytes,
+		{ name: 'PBKDF2' },
+		false,
+		['deriveKey']
+	);
 
-		// Derive an AES-CBC key using PBKDF2.
-		const key = await crypto.subtle.deriveKey(
-			{
-				name: 'PBKDF2',
-				salt: salt,
-				iterations: 100000, // A higher count means better security but slower performance.
-				hash: 'SHA-256'
-			},
-			keyMaterial,
-			{ name: 'AES-CBC', length: 256 },
-			false,
-			['encrypt']
-		);
+	// Derive an AES-CBC key using PBKDF2.
+	const key = await crypto.subtle.deriveKey(
+		{
+			name: 'PBKDF2',
+			salt: salt,
+			iterations: 100000, // A higher count means better security but slower performance.
+			hash: 'SHA-256'
+		},
+		keyMaterial,
+		{ name: 'AES-CBC', length: 256 },
+		false,
+		['encrypt']
+	);
 
-		// Generate a random Initialization Vector.
-		const iv = crypto.getRandomValues(new Uint8Array(16));
+	// Generate a random Initialization Vector.
+	const iv = crypto.getRandomValues(new Uint8Array(16));
 
-		// Encrypt the message.
-		const encryptedContent = await crypto.subtle.encrypt(
-			{
-				name: 'AES-CBC',
-				iv: iv
-			},
-			key,
-			messageBytes
-		);
+	// Encrypt the message.
+	const encryptedContent = await crypto.subtle.encrypt(
+		{
+			name: 'AES-CBC',
+			iv: iv
+		},
+		key,
+		messageBytes
+	);
 
-		// Combine salt, IV, and ciphertext into a single Uint8Array.
-		const saltLength = salt.byteLength;
-		const ivLength = iv.byteLength;
-		const ciphertext = new Uint8Array(encryptedContent);
-		const combined = new Uint8Array(saltLength + ivLength + ciphertext.byteLength);
+	// Combine salt, IV, and ciphertext into a single Uint8Array.
+	const saltLength = salt.byteLength;
+	const ivLength = iv.byteLength;
+	const ciphertext = new Uint8Array(encryptedContent);
+	const combined = new Uint8Array(saltLength + ivLength + ciphertext.byteLength);
 
-		combined.set(salt, 0);
-		combined.set(iv, saltLength);
-		combined.set(ciphertext, saltLength + ivLength);
+	combined.set(salt, 0);
+	combined.set(iv, saltLength);
+	combined.set(ciphertext, saltLength + ivLength);
 
-		// Convert combined data to a Base64 string.
-		const base64String = btoa(String.fromCharCode(...combined));
-		return base64String;
-	}
+	// Convert combined data to a Base64 string.
+	const base64String = btoa(String.fromCharCode(...combined));
+	return base64String;
+}
 	
 ```
 
@@ -175,7 +175,7 @@ deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages)
 	+ This can take an array of specified usages but we're just using this key to encrypt
 	
 
-## Creating an IV and Encrypting the message
+## Creating an IV and encrypting the message
 
 Here we're creating an [initialization vector (IV)](https://en.wikipedia.org/wiki/Initialization_vector) using the method we used to create our salt. We then use the IV, and our derived key to encrypt our message. 
 
