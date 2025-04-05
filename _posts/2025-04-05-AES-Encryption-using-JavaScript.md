@@ -242,6 +242,6 @@ We next convert the encrypted message into an integer array and make a final com
 
 Our final step is to convert the combined integer array into a Base64 string using the [btoa](https://developer.mozilla.org/en-US/docs/Web/API/Window/btoa) method, [String.fromCharCode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/fromCharCode), and using [spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) to allow the methods to iterate over the combined array. 
 
-The encryptMessage then returns the Base64 text which can be shared and decrypted using the password we specified. 
+Our encryptMessage function then returns the Base64 text which can be shared and decrypted using the password we specified. 
 
 The decryption function will explained in part 2. 
