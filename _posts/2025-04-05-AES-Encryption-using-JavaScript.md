@@ -177,7 +177,7 @@ deriveKey(algorithm, baseKey, derivedKeyAlgorithm, extractable, keyUsages)
 
 ## Creating an IV and encrypting the message
 
-Here we're creating an [initialization vector (IV)](https://en.wikipedia.org/wiki/Initialization_vector) using the method we used to create our salt. We then use the IV, and our derived key to encrypt our message. 
+Here we're creating an [IV (initialization vector)](https://en.wikipedia.org/wiki/Initialization_vector) using the method we used to create our salt. We then use the IV, and our derived key to encrypt our message. 
 
 ```
 // Generate a random Initialization Vector.
@@ -194,7 +194,7 @@ const encryptedContent = await crypto.subtle.encrypt(
 );
 ```
 
-The encryption is done using the [crypto.subtle.encrypt](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/encrypt) method which take a few parameters. 
+The encryption is done using the [crypto.subtle.encrypt](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/encrypt) method which takes a few parameters. 
 
 encrypt(algorithm, key, data)
 
