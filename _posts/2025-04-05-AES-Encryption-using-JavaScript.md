@@ -1,6 +1,8 @@
 # AES Encryption using JavaScript
 
-This is part 1 in a 2 part series on AES encryption and decryption using JavaScript and the Crypto library that is included with modern browsers. We'll work through the encryption and decryption functions and explain the various working parts. 
+This is part 1 in a 2 part series on AES encryption and decryption using JavaScript and the Crypto library that is included with modern browsers. We'll work through the encryption and decryption functions and explain the various working parts.
+
+[You can read part 2, about decryption, here.](https://blog.rm.dev/2025/04/07/AES-Decryption-using-JavaScript.html)
 
 You can find the full source here:  
 [https://github.com/rmmoul/javascrt-aes-encryption](https://github.com/rmmoul/javascrt-aes-encryption)
@@ -244,4 +246,5 @@ Our final step is to convert the combined integer array into a Base64 string usi
 
 Our encryptMessage function then returns the Base64 text which can be shared and decrypted using the password that was used to encrypt it. 
 
-The decryption function will be explained in part 2. 
+[The decryption function is explained in part 2.](https://blog.rm.dev/2025/04/07/AES-Decryption-using-JavaScript.html)
+
