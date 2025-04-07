@@ -67,7 +67,7 @@ async function decryptMessage(encryptedBase64, password) {
 }
 ```
 
-## Retrieving salt, IV, and encrypted message
+## Retrieving the salt, IV, and encrypted message
 
 The first thing the function does is to decode the message text from Base64 and move the data into a Unit8Array so that we can extract the salt, IV, and encrypted message text. 
 
