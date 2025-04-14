@@ -7,5 +7,5 @@ This type of backdoor is used to provide an attacker with access to the website 
 
 [The full, commented, backdoor script can be found here](https://github.com/rmmoul/wordpress-malware-samples/blob/main/hexadecimal-obfuscated-auto-login.php) I'm building a library of WordPress malware samples with explainations of what they do [in a repository here](https://github.com/rmmoul/wordpress-malware-samples/tree/main). 
 
-<iframe width="2545" height="1102" src="https://www.youtube.com/embed/CyPWxbLayJk" title="WordPress backdoor script example" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/CyPWxbLayJk" title="WordPress backdoor script example" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" class="video-container" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
